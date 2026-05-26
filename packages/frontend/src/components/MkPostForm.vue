@@ -100,6 +100,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<button v-tooltip="i18n.ts.useCw" class="_button" :class="[$style.footerButton, { [$style.footerButtonActive]: useCw }]" @click="useCw = !useCw"><i class="ti ti-eye-off"></i></button>
 			<button v-tooltip="i18n.ts.hashtags" class="_button" :class="[$style.footerButton, { [$style.footerButtonActive]: withHashtags }]" @click="withHashtags = !withHashtags"><i class="ti ti-hash"></i></button>
 			<button v-tooltip="i18n.ts.mention" class="_button" :class="$style.footerButton" @click="insertMention"><i class="ti ti-at"></i></button>
+			<button v-if="!mock" v-tooltip="i18n.ts.neoPaint" class="_button" :class="$style.footerButton" @click="openNeoPaint"><i class="ti ti-brush"></i></button>
 			<button v-if="showAddMfmFunction" v-tooltip="i18n.ts.addMfmFunction" :class="['_button', $style.footerButton]" @click="insertMfmFunction"><i class="ti ti-palette"></i></button>
 			<button v-if="postFormActions.length > 0" v-tooltip="i18n.ts.plugins" class="_button" :class="$style.footerButton" @click="showActions"><i class="ti ti-plug"></i></button>
 		</div>
@@ -505,6 +506,17 @@ function chooseFileFromDrive(ev: PointerEvent) {
 
 	chooseDriveFile({ multiple: true }).then(driveFiles => {
 		files.value.push(...driveFiles);
+	});
+}
+
+async function openNeoPaint() {
+	if (props.mock) return;
+
+	const { dispose } = await os.popupAsyncWithDialog(import('@/components/MkNeoPaintDialog.vue').then(x => x.default), {}, {
+		done: file => {
+			uploader.addFiles([file]);
+		},
+		closed: () => dispose(),
 	});
 }
 

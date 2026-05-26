@@ -1125,6 +1125,10 @@ export interface Locale extends ILocale {
      */
     "attachFile": string;
     /**
+     * neoでお絵かき
+     */
+    "neoPaint": string;
+    /**
      * もっと！
      */
     "more": string;
